@@ -1,0 +1,33 @@
+name: bwa_aln
+description: Run bwa aln to generate alignments to a reference
+inputParameters:
+- name: INDEX_PATH
+  localCopy:
+    disk: datadisk
+    path: bwa-index/
+- name: PREFIX
+- name: FASTQ_PATH
+  localCopy:
+    disk: datadisk
+    path: bwa-input.fastq
+outputParameters:
+- name: OUTPUT_FILE
+  localCopy:
+    disk: datadisk
+    path: bwa-output.bam
+resources:
+  minimumCpuCores: 1
+  minimumRamGb: 1
+  zones:
+  - us-central1-a
+  - us-central1-b
+  - us-central1-c
+  - us-central1-f
+  disks:
+  - name: datadisk
+    type: PERSISTENT_HDD
+    sizeGb: 100
+    mountPoint: /mnt/datadisk
+docker:
+  imageName: registry.hub.docker.com/allenday/bfx-bwa
+  cmd: "mkdir /mnt/datadisk/bwa-out; bwa aln /mnt/datadisk/bwa-index/${PREFIX} ${FASTQ_PATH} > /mnt/datadisk/bwa-out/bwa-output.bam"
