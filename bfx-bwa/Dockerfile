@@ -3,7 +3,7 @@ FROM ubuntu:12.04
 MAINTAINER Allen Day "allenday@allenday.com"
 
 ENV IMAGE_PACKAGES="samtools"
-ENV BUILD_PACKAGES="apt-utils make gcc wget zlib1g-dev"
+ENV BUILD_PACKAGES="make gcc wget zlib1g-dev"
 
 RUN apt-get -y update
 RUN apt-get -y install $BUILD_PACKAGES $IMAGE_PACKAGES
@@ -13,8 +13,8 @@ RUN wget --no-check-certificate https://github.com/lh3/bwa/archive/v0.7.15.tar.g
 RUN tar -xvzf v0.7.15.tar.gz
 WORKDIR /tmp/bwa-0.7.15
 RUN make
-RUN cp bwa /usr/bin/
-RUN cp *.pl /usr/bin/
+RUN cp ./bwa /usr/bin/
+RUN cp ./*.pl /usr/bin/
 
 ## cleanup
 
