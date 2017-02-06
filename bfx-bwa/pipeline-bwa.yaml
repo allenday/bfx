@@ -1,0 +1,29 @@
+name: bwa_index
+description: Run bwa index to generate an index for alignment
+inputParameters:
+- name: INPUT_FILE
+  localCopy:
+    disk: datadisk
+    path: input.fa
+- name: OUTPUT_PREFIX
+outputParameters:
+- name: OUTPUT_PATH
+  localCopy:
+    disk: datadisk
+    path: bwa-out/*
+resources:
+  minimumCpuCores: 1
+  minimumRamGb: 1
+  zones:
+  - us-central1-a
+  - us-central1-b
+  - us-central1-c
+  - us-central1-f
+  disks:
+  - name: datadisk
+    type: PERSISTENT_HDD
+    sizeGb: 100
+    mountPoint: /mnt/datadisk
+docker:
+  imageName: registry.hub.docker.com/allenday/bfx-bwa
+  cmd: "mkdir /mnt/datadisk/bwa-out; bwa index ${INPUT_FILE} -p /mnt/datadisk/bwa-out/${OUTPUT_PREFIX}"
