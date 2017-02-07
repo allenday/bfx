@@ -1,5 +1,5 @@
-name: bwa_aln
-description: Run bwa aln to generate alignments to a reference
+name: bwa_mem
+description: Run bwa mem to generate alignments to a reference
 inputParameters:
 - name: INDEX_PATH
   localCopy:
@@ -11,13 +11,13 @@ inputParameters:
     disk: datadisk
     path: bwa-input.fastq
 outputParameters:
-- name: OUTPUT_FILE
+- name: OUTPUT_PATH
   localCopy:
     disk: datadisk
-    path: bwa-output.bam
+    path: bwa-output.bam*
 resources:
   minimumCpuCores: 1
-  minimumRamGb: 1
+  minimumRamGb: 10
   zones:
   - us-central1-a
   - us-central1-b
@@ -30,4 +30,4 @@ resources:
     mountPoint: /mnt/datadisk
 docker:
   imageName: registry.hub.docker.com/allenday/bfx-bwa
-  cmd: "mkdir /mnt/datadisk/bwa-out; bwa aln /mnt/datadisk/bwa-index/${PREFIX} ${FASTQ_PATH} > /mnt/datadisk/bwa-out/bwa-output.bam"
+  cmd: "mkdir /mnt/datadisk/bwa-out && bwa mem /mnt/datadisk/bwa-index/${PREFIX} ${FASTQ_PATH} > /mnt/datadisk/bwa-out/tmp.sam && samtools view -S /mnt/datadisk/bwa-out/tmp.sam -b > /mnt/datadisk/bwa-out/tmp.bam && samtools sort /mnt/datadisk/bwa-out/tmp.bam /mnt/datadisk/bwa-out/bwa-output && samtools index /mnt/datadisk/bwa-out/bwa-output.bam && rm -vf /mnt/datadisk/bwa-out/tmp*"
