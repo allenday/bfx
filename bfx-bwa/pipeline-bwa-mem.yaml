@@ -16,7 +16,7 @@ outputParameters:
     disk: datadisk
     path: bwa-output.bam*
 resources:
-  minimumCpuCores: 1
+  minimumCpuCores: 4
   minimumRamGb: 10
   zones:
   - us-central1-a
@@ -30,4 +30,4 @@ resources:
     mountPoint: /mnt/datadisk
 docker:
   imageName: registry.hub.docker.com/allenday/bfx-bwa
-  cmd: "mkdir /mnt/datadisk/bwa-out && bwa mem /mnt/datadisk/bwa-index/${PREFIX} ${FASTQ_PATH} > /mnt/datadisk/bwa-out/tmp.sam && samtools view -S /mnt/datadisk/bwa-out/tmp.sam -b > /mnt/datadisk/bwa-out/tmp.bam && samtools sort /mnt/datadisk/bwa-out/tmp.bam /mnt/datadisk/bwa-out/bwa-output && samtools index /mnt/datadisk/bwa-out/bwa-output.bam && rm -vf /mnt/datadisk/bwa-out/tmp*"
+  cmd: "mkdir /mnt/datadisk/bwa-out && bwa mem -t 4 /mnt/datadisk/bwa-index/${PREFIX} ${FASTQ_PATH} > /mnt/datadisk/bwa-out/tmp.sam && samtools view -S /mnt/datadisk/bwa-out/tmp.sam -b > /mnt/datadisk/bwa-out/tmp.bam && samtools sort /mnt/datadisk/bwa-out/tmp.bam /mnt/datadisk/bwa-out/bwa-output && samtools index /mnt/datadisk/bwa-out/bwa-output.bam && rm -vf /mnt/datadisk/bwa-out/tmp*"
